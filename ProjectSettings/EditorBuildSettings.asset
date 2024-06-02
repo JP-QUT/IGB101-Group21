@@ -4,5 +4,11 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/LevelLiqing.unity
+    guid: 84805be06db2004458473c97774c4945
+  - enabled: 1
+    path: Assets/LevelJP.unity
+    guid: 5908cef7bd469374492d24c82d1bab1a
   m_configObjects: {}

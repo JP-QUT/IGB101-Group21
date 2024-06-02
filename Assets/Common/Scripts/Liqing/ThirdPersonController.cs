@@ -14,19 +14,20 @@ public class ThirdPersonController : MonoBehaviour
     public int tongguanCoinum;
     int numCoin = 0;
     bool isCanMove = true;
-    public float moveSpeed = 5f; // ÒÆ¶¯ËÙ¶È
-    public float rotationSpeed = 10f; // Ðý×ªËÙ¶È
+    public float moveSpeed = 5f; // ï¿½Æ¶ï¿½ï¿½Ù¶ï¿½
+    public float rotationSpeed = 10f; // ï¿½ï¿½×ªï¿½Ù¶ï¿½
     public float jumpHeight = 2;
     public Image _imgBg;
     public Image _imgFall;
     public Image _imgsucceed;
     public TextMeshProUGUI _textCoinNum;
+    public string nextScene; // Added by JP: To transition next scene
     private CharacterController controller;
     private Vector3 moveDirection;
     Vector3 curPosition;
     private Animator animator;
-    bool isFail = false;
-    bool isSueeccd = false;
+    public bool isFail = false;
+    public bool isSueeccd = false;
     private void Start()
     {
         curPosition = transform.position;
@@ -36,10 +37,10 @@ public class ThirdPersonController : MonoBehaviour
         {
             _imgBg.gameObject.SetActive(false);
             isCanMove = true;
-            if (isFail || isSueeccd)
-            {
-                SceneManager.LoadScene(0);
-            }
+            //if (isFail || isSueeccd)
+            //{
+            //    SceneManager.LoadScene(scene);
+            //}
         });
         controller = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
@@ -61,28 +62,28 @@ public class ThirdPersonController : MonoBehaviour
         camera.transform.position = new Vector3(camera.transform.position.x, 4, camera.transform.position.z);
         if (isCanMove)
         {
-            // »ñÈ¡Íæ¼ÒÊäÈë
+            // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             float horizontalInput = Input.GetAxis("Horizontal");
             float verticalInput = Input.GetAxis("Vertical");
 
-            // ¼ÆËãÒÆ¶¯·½Ïò
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
             Vector3 movement = new Vector3(horizontalInput, 0f, verticalInput);
             movement = transform.TransformDirection(movement);
             movement *= moveSpeed;
 
             movement.y -= 9.8f;
 
-            // Ê¹ÓÃ½ÇÉ«¿ØÖÆÆ÷ÒÆ¶¯
+            // Ê¹ï¿½Ã½ï¿½É«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
             //controller.Move(movement * Time.deltaTime);
 
 
-            // »ñÈ¡Êó±êÊäÈë
+            // ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             float mouseX = Input.GetAxis("Mouse X");
 
-            // ¼ÆËãÐý×ª½Ç¶È
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×ªï¿½Ç¶ï¿½
             Quaternion rotation = Quaternion.Euler(0f, mouseX * rotationSpeed, 0f);
 
-            // Ðý×ª½ÇÉ«
+            // ï¿½ï¿½×ªï¿½ï¿½É«
             transform.rotation *= rotation;
 
             float _walk = verticalInput;// Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput);
@@ -121,21 +122,26 @@ public class ThirdPersonController : MonoBehaviour
         {
             controller.Move(transform.up * jumpHeight);
         }
+
+        
+
     }
 
-    //³É¹¦¡¢Ê§°Ü
+    //ï¿½É¹ï¿½ï¿½ï¿½Ê§ï¿½ï¿½
     public void OnSucceed()
     {
         _textCoinNum.text = numCoin + "/" + maxCoinNum.ToString();
         if (numCoin == tongguanCoinum)
         {
-            //Í¨¹Ø³É¹¦
+            //Í¨ï¿½Ø³É¹ï¿½
             isSueeccd = true;
-            _btnStart.GetComponentInChildren<TextMeshProUGUI>().text = "Restart";
+            SceneManager.LoadScene(nextScene);
+            
+            //_btnStart.GetComponentInChildren<TextMeshProUGUI>().text = "Restart";
             //_btnStart.gameObject.SetActive(false);
-            _imgFall.gameObject.SetActive(false);
-            _imgsucceed.gameObject.SetActive(true);
-            _imgBg.gameObject.SetActive(true);
+            //_imgFall.gameObject.SetActive(false);
+            //_imgsucceed.gameObject.SetActive(true);
+            //_imgBg.gameObject.SetActive(true);
         }
     }
     public Button _btnStart;
@@ -147,16 +153,16 @@ public class ThirdPersonController : MonoBehaviour
             Destroy(hit.collider.gameObject.transform.parent.gameObject);
             OnSucceed();
         }
-        else if (hit.gameObject.tag == "obstacle")
-        {
-            //ÊäÁË
-            isFail = true;
-            isCanMove = false;
-            _btnStart.GetComponentInChildren<TextMeshProUGUI>().text = "Restart";
-            _imgFall.gameObject.SetActive(true);
-            _imgsucceed.gameObject.SetActive(false);
-            _imgBg.gameObject.SetActive(true);
-        }
+        //else if (hit.gameObject.tag == "obstacle")
+        //{
+        //    //ï¿½ï¿½ï¿½ï¿½
+        //    isFail = true;
+        //    isCanMove = false;
+        //    _btnStart.GetComponentInChildren<TextMeshProUGUI>().text = "Restart";
+        //    _imgFall.gameObject.SetActive(true);
+        //    _imgsucceed.gameObject.SetActive(false);
+        //    _imgBg.gameObject.SetActive(true);
+        //}
     }
 
 }
